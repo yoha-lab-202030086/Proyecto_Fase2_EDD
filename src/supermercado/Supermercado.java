@@ -1,17 +1,29 @@
 
 import sistema.Sistema;
 import modelos.Producto;
+import estructuras.grafo.Grafo;
+import estructuras.grafo.NodoGrafo;
+import estructuras.grafo.Arista;
+import modelos.Sucursal;
+
 
 public class Supermercado {
     public static void main(String[] args) {
 
-        Sistema sistema = new Sistema();
+        Grafo g = new Grafo();
 
-        Producto p1 = new Producto("Arroz", "123", "Granos",
-                "2026-01-01", "MarcaA", 10.5, 5);
+Sucursal s1 = new Sucursal(1, "A", "X", 1,1,1);
+Sucursal s2 = new Sucursal(2, "B", "Y", 1,1,1);
+Sucursal s3 = new Sucursal(3, "C", "Z", 1,1,1);
 
-        sistema.agregarProducto(p1);
+g.agregarSucursal(s1);
+g.agregarSucursal(s2);
+g.agregarSucursal(s3);
 
-        System.out.println(sistema.buscarPorCodigo("123"));
+g.conectar(1, 2, 5, 10);
+g.conectar(2, 3, 3, 5);
+g.conectar(1, 3, 15, 20);
+
+g.dijkstra(1, true); // por tiempo
     }
 }
