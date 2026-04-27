@@ -6,13 +6,13 @@ import modelos.Producto;
 
 public class Sistema {
 
-    private ListaEnlazada lista;
-    private HashTable hash;
+    private Lista lista;
+    private TablaHash hash;
     private Pila historial;
 
     public Sistema() {
-        lista = new ListaEnlazada();
-        hash = new HashTable(1000);
+        lista = new Lista();
+        hash = new TablaHash(1000);
         historial = new Pila();
     }
 
