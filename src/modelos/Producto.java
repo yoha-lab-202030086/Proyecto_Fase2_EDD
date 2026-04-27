@@ -2,6 +2,9 @@
 package modelos;
 
 public class Producto {
+    
+    private String estado;
+    
     public String nombre;
     public String codigo;
     public String categoria;
@@ -19,6 +22,7 @@ public class Producto {
         this.marca = marca;
         this.precio = precio;
         this.stock = stock;
+        this.estado = "EN_BODEGA";
     }
     
     public String getNombre() {return nombre; }
@@ -36,4 +40,12 @@ public class Producto {
     public String toString() {
         return nombre + " | " + codigo;
      }
-   }
+    
+    public String getEstado() {
+            return estado;
+       }
+    
+    public void setEstado(String estado) {
+            this.estado = estado;
+            }
+    }

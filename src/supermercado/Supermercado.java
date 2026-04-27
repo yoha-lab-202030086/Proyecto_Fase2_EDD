@@ -5,25 +5,30 @@ import estructuras.grafo.Grafo;
 import estructuras.grafo.NodoGrafo;
 import estructuras.grafo.Arista;
 import modelos.Sucursal;
+import sistema.Simulador;
 
 
 public class Supermercado {
     public static void main(String[] args) {
 
-        Grafo g = new Grafo();
+     Simulador sim = new Simulador();
 
-Sucursal s1 = new Sucursal(1, "A", "X", 1,1,1);
-Sucursal s2 = new Sucursal(2, "B", "Y", 1,1,1);
-Sucursal s3 = new Sucursal(3, "C", "Z", 1,1,1);
+Sucursal s1 = new Sucursal(1, "Central", "Zona 1", 1,1,1);
+Sucursal s2 = new Sucursal(2, "Norte", "Zona 2", 1,1,1);
 
-g.agregarSucursal(s1);
-g.agregarSucursal(s2);
-g.agregarSucursal(s3);
+Producto p = new Producto("Arroz", "123", "Granos", "2026", "A", 10, 5);
 
-g.conectar(1, 2, 5, 10);
-g.conectar(2, 3, 3, 5);
-g.conectar(1, 3, 15, 20);
+// Flujo completo
+sim.ingresarProducto(s1, p);
+sim.procesarIngreso(s1);
+sim.procesarPreparacion(s1);
 
-g.dijkstra(1, true); // por tiempo
+Producto enviado = sim.despachar(s1);
+
+// llega a otra sucursal
+sim.recibir(s2, enviado);
+
+System.out.println(enviado.getEstado());
+
     }
 }
