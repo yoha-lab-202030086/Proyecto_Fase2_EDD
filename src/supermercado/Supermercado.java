@@ -1,34 +1,25 @@
-
-import sistema.Sistema;
+import estructuras.arboles.ArbolBPlus;
 import modelos.Producto;
-import estructuras.grafo.Grafo;
-import estructuras.grafo.NodoGrafo;
-import estructuras.grafo.Arista;
-import modelos.Sucursal;
-import sistema.Simulador;
-
 
 public class Supermercado {
+
     public static void main(String[] args) {
 
-     Simulador sim = new Simulador();
+        ArbolBPlus arbol = new ArbolBPlus(2);
 
-Sucursal s1 = new Sucursal(1, "Central", "Zona 1", 1,1,1);
-Sucursal s2 = new Sucursal(2, "Norte", "Zona 2", 1,1,1);
+        arbol.insertar(new Producto("50", "Arroz", "Grano", "2026", "A1", 10.5, 5));
+        arbol.insertar(new Producto("20", "Frijol", "Grano", "2026", "A2", 8.0, 3));
+        arbol.insertar(new Producto("70", "Leche", "Lacteo", "2025", "B1", 12.0, 10));
+        arbol.insertar(new Producto("10", "Pan", "Panaderia", "2025", "B2", 5.0, 2));
+        arbol.insertar(new Producto("30", "Huevos", "Proteina", "2025", "C1", 15.0, 12));
+        arbol.insertar(new Producto("60", "Queso", "Lacteo", "2025", "C2", 20.0, 4));
+        arbol.insertar(new Producto("80", "Carne", "Proteina", "2025", "D1", 30.0, 6));
 
-Producto p = new Producto("Arroz", "123", "Granos", "2026", "A", 10, 5);
+        System.out.println("=== RECORRIDO ===");
+        arbol.recorrer();
 
-// Flujo completo
-sim.ingresarProducto(s1, p);
-sim.procesarIngreso(s1);
-sim.procesarPreparacion(s1);
-
-Producto enviado = sim.despachar(s1);
-
-// llega a otra sucursal
-sim.recibir(s2, enviado);
-
-System.out.println(enviado.getEstado());
-
+        System.out.println("\n=== ELIMINAR 20 ===");
+        arbol.eliminar("20");
+        arbol.recorrer();
     }
 }
