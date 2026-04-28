@@ -2,19 +2,6 @@ package estructuras.lineales;
 
 import modelos.Producto;
 
-class NodoCola {
-    private Producto dato;
-    private NodoCola siguiente;
-
-    public NodoCola(Producto d) {
-        dato = d;
-    }
-
-    public Producto getDato() { return dato; }
-    public NodoCola getSiguiente() { return siguiente; }
-    public void setSiguiente(NodoCola s) { siguiente = s; }
-}
-
 public class Cola {
 
     private NodoCola frente;
@@ -42,6 +29,10 @@ public class Cola {
         }
 
         return temp;
+    }
+    
+    public Producto verFrente() {
+        return (frente == null) ? null : frente.getDato();
     }
 
     public boolean estaVacia() {

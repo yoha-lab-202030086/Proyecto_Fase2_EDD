@@ -33,12 +33,41 @@ public class Grafo {
 
         if (origen == null || destino == null) return;
 
-        Arista nueva = new Arista(destino, tiempo, costo);
+          // 1. Conexión de Origen a Destino (Ida)
+        Arista nuevaIda = new Arista(destino, tiempo, costo);
+        nuevaIda.setSiguiente(origen.getListaAdyacentes());
+        origen.setListaAdyacentes(nuevaIda);
 
-        nueva.setSiguiente(origen.getListaAdyacentes());
-        origen.setListaAdyacentes(nueva);
-    }
+         // 2. Conexión de Destino a Origen (Vuelta)
+        Arista nuevaVuelta = new Arista(origen, tiempo, costo);
+        nuevaVuelta.setSiguiente(destino.getListaAdyacentes());
+        destino.setListaAdyacentes(nuevaVuelta);
+}
     
+    public void mostrarGrafo() {
+
+    NodoGrafo temp = lista;
+
+    while (temp != null) {
+
+        System.out.print(temp.getSucursal().getNombre() + " -> ");
+
+        Arista arista = temp.getListaAdyacentes();
+
+        while (arista != null) {
+            System.out.print(
+                arista.getDestino().getSucursal().getNombre() +
+                "(T:" + arista.getTiempo() +
+                ",C:" + arista.getCosto() + ") -> "
+            );
+
+            arista = arista.getSiguiente();
+        }
+
+        System.out.println();
+        temp = temp.getSiguiente();
+    }
+}
     public void dijkstra(int origenId, boolean usarTiempo) {
 
         int n = contarNodos();

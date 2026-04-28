@@ -15,6 +15,10 @@ public class NodoLista {
     public Producto getDato() { 
         return dato; 
     }
+    
+    public void setDato(Producto dato) {
+    this.dato = dato;
+    }
 
     public NodoLista getSiguiente() { 
         return siguiente; 

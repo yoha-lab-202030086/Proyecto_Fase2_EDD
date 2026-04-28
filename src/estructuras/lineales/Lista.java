@@ -73,6 +73,11 @@ public class Lista {
                 if (actual == cola) {
                     cola = anterior;
                 }
+                
+                if (cabeza == null) {
+                    cola = null;
+                }
+
 
                 size--;
                 return true;

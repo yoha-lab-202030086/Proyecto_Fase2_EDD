@@ -5,22 +5,27 @@ import modelos.Producto;
 public class TablaHash {
 
     private NodoHash[] tabla;
-    private int tamaño;
+    private int tamanio;
 
     public TablaHash(int tamaño) {
-        this.tamaño = tamaño;
-        tabla = new NodoHash[tamaño];
+        this.tamanio = tamanio;
+        tabla = new NodoHash[tamanio];
     }
 
     private int hash(String clave) {
         int hash = 0;
         for (int i = 0; i < clave.length(); i++) {
-            hash = (31 * hash + clave.charAt(i)) % tamaño;
+            hash = (31 * hash + clave.charAt(i)) % tamanio;
         }
         return Math.abs(hash);
     }
 
     public void insertar(Producto p) {
+        
+        if (buscar(p.getCodigo()) != null) {
+            return;
+        }  
+        
         int idx = hash(p.getCodigo());
 
         NodoHash nuevo = new NodoHash(p);
@@ -75,4 +80,16 @@ public class TablaHash {
 
         return false;
     }
+    
+    public void listar() {
+    for (int i = 0; i < tamanio; i++) {
+        NodoHash actual = tabla[i];
+
+        while (actual != null) {
+            System.out.println(actual.getDato());
+            actual = actual.getSiguiente();
+        }
+    }
+  }
 }
+

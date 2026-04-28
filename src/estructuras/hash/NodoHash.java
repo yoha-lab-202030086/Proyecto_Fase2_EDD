@@ -11,6 +11,10 @@ class NodoHash {
     }
 
     public Producto getDato() { return dato; }
+    public void setDato(Producto dato) {
+    this.dato = dato;
+    }
+
     public NodoHash getSiguiente() { return siguiente; }
     public void setSiguiente(NodoHash s) { siguiente = s; }
 }
