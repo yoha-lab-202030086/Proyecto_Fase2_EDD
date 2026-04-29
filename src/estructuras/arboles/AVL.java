@@ -3,7 +3,6 @@ package estructuras.arboles;
 import modelos.Producto;
 
 public class AVL {
-
     private NodoAVL raiz;
 
     // Obtener altura
@@ -44,6 +43,9 @@ public class AVL {
         return y;
     }
 
+     public void insertar(Producto p) {
+        raiz = insertar(raiz, p);
+    }
     // Insertar recursivo
     private NodoAVL insertar(NodoAVL nodo, Producto dato) {
 
@@ -53,8 +55,9 @@ public class AVL {
             nodo.setIzquierda(insertar(nodo.getIzquierda(), dato));
         else if (dato.getNombre().compareTo(nodo.getDato().getNombre()) > 0)
             nodo.setDerecha(insertar(nodo.getDerecha(), dato));
-        else
-            return nodo; // no duplicados
+        else {
+            throw new RuntimeException("Error: El producto '" + dato.getNombre() + "' ya existe en el AVL.");
+        }
 
         nodo.setAltura(1 + Math.max(altura(nodo.getIzquierda()), altura(nodo.getDerecha())));
 
@@ -83,25 +86,24 @@ public class AVL {
         return nodo;
     }
 
-    public void insertar(Producto p) {
-        raiz = insertar(raiz, p);
-    }
-
-    // Buscar
     public Producto buscar(String nombre) {
-        NodoAVL actual = raiz;
-
-        while (actual != null) {
-            if (nombre.equals(actual.getDato().getNombre()))
-                return actual.getDato();
-
-            if (nombre.compareTo(actual.getDato().getNombre()) < 0)
-                actual = actual.getIzquierda();
-            else
-                actual = actual.getDerecha();
-        }
-    return null;
+        return buscarLogico(raiz, nombre);
     }
+
+    private Producto buscarLogico(NodoAVL actual, String nombre) {
+        if (actual == null) return null;
+
+        if (nombre.equals(actual.getDato().getNombre())) return actual.getDato();
+
+        //Búsqueda binaria
+        if (nombre.compareTo(actual.getDato().getNombre()) < 0)
+            return buscarLogico(actual.getIzquierda(), nombre);
+        else
+            return buscarLogico(actual.getDerecha(), nombre);
+    }
+    
+    
+    
         
     private NodoAVL eliminar(NodoAVL nodo, String nombre) {
 
@@ -128,7 +130,6 @@ public class AVL {
         else {
             NodoAVL temp = minValor(nodo.getDerecha());
             nodo.setDato(temp.getDato());
-           // nodo = new NodoAVL(temp.getDato());
             nodo.setDerecha(eliminar(nodo.getDerecha(), temp.getDato().getNombre()));
         }
     }
@@ -163,18 +164,18 @@ public class AVL {
     raiz = eliminar(raiz, nombre);
 }
 
-    public void inorden() {
-    inorden(raiz);
+    public void inOrden() {
+    inOrden(raiz);
 }
 
-    private void inorden(NodoAVL nodo) {
+    private void inOrden(NodoAVL nodo) {
     if (nodo != null) {
-        inorden(nodo.getIzquierda());
+        inOrden(nodo.getIzquierda());
         System.out.println(nodo.getDato());
-        inorden(nodo.getDerecha());
+        inOrden(nodo.getDerecha());
     }
 }
-
+    
     private NodoAVL minValor(NodoAVL nodo) {
     NodoAVL actual = nodo;
     while (actual.getIzquierda() != null) {

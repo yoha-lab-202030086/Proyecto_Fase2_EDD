@@ -106,4 +106,13 @@ public class Lista {
     public boolean estaVacia() {
         return cabeza == null;
     }
+    
+    public void mostrar() {
+    NodoLista aux = cabeza;
+    while (aux != null) {
+        System.out.println(aux.getDato());
+        aux = aux.getSiguiente();
+    }
+ }
 }
+

@@ -1,6 +1,7 @@
 package estructuras.arboles;
 
 import modelos.Producto;
+import estructuras.lineales.Lista;
 
 public class ArbolBPlus {
 
@@ -78,34 +79,78 @@ public class ArbolBPlus {
         }
     }
 
-    private void dividir(NodoBPlus padre, int i, NodoBPlus nodo) {
+private void dividir(NodoBPlus padre, int i, NodoBPlus nodo) {
 
-        NodoBPlus nuevo = new NodoBPlus(d, nodo.hoja);
+    NodoBPlus nuevo = new NodoBPlus(d, nodo.hoja);
 
-        if (nodo.hoja) {
+    if (nodo.hoja) {
 
-            nuevo.n = d;
-            nodo.n = d;
+        nuevo.n = d;
+        nodo.n = d;
 
-            for (int j = 0; j < d; j++) {
-                nuevo.claves[j] = nodo.claves[j + d];
-                nuevo.datos[j] = nodo.datos[j + d];
-            }
-
-            nuevo.siguiente = nodo.siguiente;
-            nodo.siguiente = nuevo;
-
-            for (int j = padre.n; j > i; j--) {
-                padre.claves[j] = padre.claves[j - 1];
-                padre.hijos[j + 1] = padre.hijos[j];
-            }
-
-            padre.claves[i] = nuevo.claves[0];
-            padre.hijos[i + 1] = nuevo;
-            padre.n++;
+        for (int j = 0; j < d; j++) {
+            nuevo.claves[j] = nodo.claves[j + d];
+            nuevo.datos[j] = nodo.datos[j + d];
         }
+
+        nuevo.siguiente = nodo.siguiente;
+        nodo.siguiente = nuevo;
+
+        for (int j = padre.n; j > i; j--) {
+            padre.claves[j] = padre.claves[j - 1];
+            padre.hijos[j + 1] = padre.hijos[j];
+        }
+
+        padre.claves[i] = nuevo.claves[0];
+        padre.hijos[i + 1] = nuevo;
+        padre.n++;
+
+    } else {
+
+        nuevo.n = d;
+
+        for (int j = 0; j < d; j++)
+            nuevo.claves[j] = nodo.claves[j + d + 1];
+
+        for (int j = 0; j <= d; j++)
+            nuevo.hijos[j] = nodo.hijos[j + d + 1];
+
+        nodo.n = d;
+
+        for (int j = padre.n; j > i; j--) {
+            padre.claves[j] = padre.claves[j - 1];
+            padre.hijos[j + 1] = padre.hijos[j];
+        }
+
+        padre.claves[i] = nodo.claves[d];
+        padre.hijos[i + 1] = nuevo;
+        padre.n++;
+    }
+}
+    
+    public Lista buscarCategoria(String categoria) {
+
+    Lista resultado = new Lista();
+
+    NodoBPlus nodo = raiz;
+
+    while (!nodo.hoja)
+        nodo = nodo.hijos[0];
+
+    while (nodo != null) {
+
+        for (int i = 0; i < nodo.n; i++) {
+            if (nodo.datos[i].getCategoria().equals(categoria)) {
+                resultado.insertar(nodo.datos[i]);
+            }
+        }
+
+        nodo = nodo.siguiente;
     }
 
+    return resultado;
+}
+    
     public void eliminar(String clave) {
         eliminar(raiz, clave);
 

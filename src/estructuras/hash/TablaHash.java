@@ -7,7 +7,7 @@ public class TablaHash {
     private NodoHash[] tabla;
     private int tamanio;
 
-    public TablaHash(int tamaño) {
+    public TablaHash(int tamanio) {
         this.tamanio = tamanio;
         tabla = new NodoHash[tamanio];
     }

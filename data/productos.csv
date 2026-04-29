@@ -1,0 +1,3 @@
+SucursalID,Nombre,CodigoBarra,Categoria,FechaCaducidad,Marca,Precio,Stock
+1,Arroz,100,Grano,2026-01-10,MarcaA,10.5,5
+1,Leche,200,Lacteo,2026-02-15,MarcaB,8.0,3

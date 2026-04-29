@@ -1,6 +1,7 @@
 package estructuras.arboles;
 
 import modelos.Producto;
+import estructuras.lineales.Lista;
 
 public class ArbolB {
 
@@ -99,6 +100,31 @@ public class ArbolB {
 
         padre.claves[i] = lleno.claves[d];
         padre.n++;
+    }
+    
+    public Lista buscarPorRango(String inicio, String fin) {
+    Lista lista = new Lista();
+    buscarRango(raiz, inicio, fin, lista);
+    return lista;
+}
+    
+    private void buscarRango(NodoB nodo, String inicio, String fin, Lista lista) {
+
+        int i;
+
+        for (i = 0; i < nodo.n; i++) {
+
+            if (!nodo.hoja)
+                buscarRango(nodo.hijos[i], inicio, fin, lista);
+
+            String fecha = nodo.claves[i].getFecha();
+
+            if (fecha.compareTo(inicio) >= 0 && fecha.compareTo(fin) <= 0)
+                lista.insertar(nodo.claves[i]);
+        }
+
+        if (!nodo.hoja)
+            buscarRango(nodo.hijos[i], inicio, fin, lista);
     }
     
     public void eliminar(String clave) {
@@ -207,7 +233,7 @@ public class ArbolB {
         hijo.claves[0] = nodo.claves[idx - 1];
         nodo.claves[idx - 1] = hermano.claves[hermano.n - 1];
 
-        hijo.n--;
+        hijo.n++;
         hermano.n--;
     }
 

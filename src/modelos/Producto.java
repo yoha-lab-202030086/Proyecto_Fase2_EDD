@@ -38,8 +38,21 @@ public class Producto {
     
     @Override
     public String toString() {
-        return nombre + " | " + codigo;
-     }
+       // return nombre + " | " + codigo;
+        
+    return "-----------------------------------\n" +
+           "DETALLE DEL PRODUCTO\n" +
+           "-----------------------------------\n" +
+           "Nombre:    " + nombre + "\n" +
+           "Código:    " + codigo + "\n" +
+           "Categoría: " + categoria + "\n" +
+           "Fecha:     " + fecha + "\n" +
+           "Marca:     " + marca + "\n" +
+           "Precio:    $" + precio + "\n" +
+           "Stock:     " + stock + " unidades\n" +
+           "Estado:    " + getEstado() + "\n" +
+           "-----------------------------------";
+}
     
     public String getEstado() {
             return estado;

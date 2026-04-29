@@ -27,22 +27,43 @@ public class Grafo {
         return null;
     }
 
-    public void conectar(int idOrigen, int idDestino, int tiempo, int costo) {
-        NodoGrafo origen = buscarNodo(idOrigen);
-        NodoGrafo destino = buscarNodo(idDestino);
+public void agregarArista(String idOrigen, String idDestino, int tiempo, double costo) {
+    
+    NodoGrafo origen = buscarNodo(Integer.parseInt(idOrigen));
+    NodoGrafo destino = buscarNodo(Integer.parseInt(idDestino));
 
-        if (origen == null || destino == null) return;
+    if (origen == null || destino == null) {
+        System.out.println("Error: No se encontró una de las sucursales");
+        return;
+    }
+
+    // 1. Conexión de Origen a Destino
+    Arista nuevaIda = new Arista(destino, tiempo, (int)costo);
+    nuevaIda.setSiguiente(origen.getListaAdyacentes());
+    origen.setListaAdyacentes(nuevaIda);
+
+    // 2. Conexión de Destino a Origen (Grafo no dirigido)
+    Arista nuevaVuelta = new Arista(origen, tiempo, (int)costo);
+    nuevaVuelta.setSiguiente(destino.getListaAdyacentes());
+    destino.setListaAdyacentes(nuevaVuelta);
+}
+
+    //public void conectar(int idOrigen, int idDestino, int tiempo, int costo) {
+       // NodoGrafo origen = buscarNodo(idOrigen);
+        //NodoGrafo destino = buscarNodo(idDestino);
+
+        //if (origen == null || destino == null) return;
 
           // 1. Conexión de Origen a Destino (Ida)
-        Arista nuevaIda = new Arista(destino, tiempo, costo);
-        nuevaIda.setSiguiente(origen.getListaAdyacentes());
-        origen.setListaAdyacentes(nuevaIda);
+        // Arista nuevaIda = new Arista(destino, tiempo, costo);
+       // nuevaIda.setSiguiente(origen.getListaAdyacentes());
+       // origen.setListaAdyacentes(nuevaIda);
 
          // 2. Conexión de Destino a Origen (Vuelta)
-        Arista nuevaVuelta = new Arista(origen, tiempo, costo);
-        nuevaVuelta.setSiguiente(destino.getListaAdyacentes());
-        destino.setListaAdyacentes(nuevaVuelta);
-}
+      //  Arista nuevaVuelta = new Arista(origen, tiempo, costo);
+    //    nuevaVuelta.setSiguiente(destino.getListaAdyacentes());
+      //  destino.setListaAdyacentes(nuevaVuelta);
+//}
     
     public void mostrarGrafo() {
 
@@ -107,7 +128,7 @@ public class Grafo {
             while (arista != null) {
 
                 int v = indexOf(nodos,
-                        arista.getDestino().getSucursal().getId());
+                   arista.getDestino().getSucursal().getId());
 
                 int peso = usarTiempo ?
                         arista.getTiempo() : arista.getCosto();
