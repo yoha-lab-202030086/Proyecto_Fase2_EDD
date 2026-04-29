@@ -12,27 +12,32 @@ public class ArbolBPlus {
         this.d = d;
         raiz = new NodoBPlus(d, true);
     }
-
-    public Producto buscar(String clave) {
-
-        NodoBPlus nodo = raiz;
-
-        while (!nodo.hoja) {
-            int i = 0;
-            while (i < nodo.n && clave.compareTo(nodo.claves[i]) >= 0)
-                i++;
-            nodo = nodo.hijos[i];
-        }
-
-        for (int i = 0; i < nodo.n; i++)
-            if (nodo.claves[i].equals(clave))
-                return nodo.datos[i];
-
-        return null;
+     
+    private Lista obtenerLista(String categoria) {
+    NodoBPlus nodo = raiz;
+   
+    while (!nodo.hoja) {
+        int i = 0;
+        while (i < nodo.n && categoria.compareTo(nodo.claves[i]) >= 0)
+            i++;
+        nodo = nodo.hijos[i];
     }
+   
+    for (int i = 0; i < nodo.n; i++) {
+        if (nodo.claves[i].equals(categoria))
+            return nodo.datos[i]; 
+    }
+    return null; 
+}
 
     public void insertar(Producto p) {
+       try {
+           Lista listaExistente = obtenerLista(p.getCategoria());
 
+    if (listaExistente != null) {
+       
+        listaExistente.insertar(p);
+    } else {
         if (raiz.n == 2 * d) {
             NodoBPlus nueva = new NodoBPlus(d, false);
             nueva.hijos[0] = raiz;
@@ -42,43 +47,36 @@ public class ArbolBPlus {
 
         insertarNoLleno(raiz, p);
     }
-
-    private void insertarNoLleno(NodoBPlus nodo, Producto p) {
+     } catch (Exception e) {
+        throw new RuntimeException("Error crítico en Árbol B+: " + e.getMessage());
+ }
+       }
+    
+     private void insertarNoLleno(NodoBPlus nodo, Producto p) {
+        String llave = p.getCategoria();
 
         if (nodo.hoja) {
-
             int i = nodo.n - 1;
-
-            while (i >= 0 && p.getCodigo().compareTo(nodo.claves[i]) < 0) {
+            while (i >= 0 && llave.compareTo(nodo.claves[i]) < 0) {
                 nodo.claves[i + 1] = nodo.claves[i];
                 nodo.datos[i + 1] = nodo.datos[i];
                 i--;
             }
-
-            nodo.claves[i + 1] = p.getCodigo();
-            nodo.datos[i + 1] = p;
+            nodo.claves[i + 1] = llave;
+            nodo.datos[i + 1] = new Lista(); // Inicializamos la colección
+            nodo.datos[i + 1].insertar(p);
             nodo.n++;
-
         } else {
-
             int i = nodo.n - 1;
-
-            while (i >= 0 && p.getCodigo().compareTo(nodo.claves[i]) < 0)
-                i--;
-
+            while (i >= 0 && llave.compareTo(nodo.claves[i]) < 0) i--;
             i++;
-
             if (nodo.hijos[i].n == 2 * d) {
                 dividir(nodo, i, nodo.hijos[i]);
-
-                if (p.getCodigo().compareTo(nodo.claves[i]) >= 0)
-                    i++;
+                if (llave.compareTo(nodo.claves[i]) >= 0) i++;
             }
-
             insertarNoLleno(nodo.hijos[i], p);
         }
     }
-
 private void dividir(NodoBPlus padre, int i, NodoBPlus nodo) {
 
     NodoBPlus nuevo = new NodoBPlus(d, nodo.hoja);
@@ -128,30 +126,12 @@ private void dividir(NodoBPlus padre, int i, NodoBPlus nodo) {
     }
 }
     
-    public Lista buscarCategoria(String categoria) {
-
-    Lista resultado = new Lista();
-
-    NodoBPlus nodo = raiz;
-
-    while (!nodo.hoja)
-        nodo = nodo.hijos[0];
-
-    while (nodo != null) {
-
-        for (int i = 0; i < nodo.n; i++) {
-            if (nodo.datos[i].getCategoria().equals(categoria)) {
-                resultado.insertar(nodo.datos[i]);
-            }
-        }
-
-        nodo = nodo.siguiente;
+public Lista buscarCategoria(String categoria) {
+        Lista l = obtenerLista(categoria);
+        return (l != null) ? l : new Lista(); 
     }
 
-    return resultado;
-}
-    
-    public void eliminar(String clave) {
+    /*public void eliminar(String clave) {
         eliminar(raiz, clave);
 
         if (!raiz.hoja && raiz.n == 0)
@@ -189,7 +169,51 @@ private void dividir(NodoBPlus padre, int i, NodoBPlus nodo) {
             if (i < nodo.n)
                 nodo.claves[i] = obtenerMin(nodo.hijos[i + 1]);
         }
+    } */
+
+public void eliminar(String categoria, String codigoProducto) {
+    Lista l = obtenerLista(categoria);
+    
+    if (l != null) {
+        l.eliminar(codigoProducto);
+        
+        // Opcional: Si la categoría queda vacía, se podría ejecutar 
+        // la lógica de eliminar el nodo del árbol para mantenerlo limpio.
+        if (l.estaVacia()) {
+            eliminarLlaveDelArbol(categoria);
+        }
     }
+}
+
+private void eliminarLlaveDelArbol(String categoria) {
+    eliminarRecursivo(raiz, categoria);
+    if (!raiz.hoja && raiz.n == 0) {
+        raiz = raiz.hijos[0];
+    }
+}
+
+private void eliminarRecursivo(NodoBPlus nodo, String clave) {
+    if (nodo.hoja) {
+        int i = 0;
+        while (i < nodo.n && !nodo.claves[i].equals(clave)) i++;
+
+        if (i < nodo.n) {
+            for (int j = i + 1; j < nodo.n; j++) {
+                nodo.claves[j - 1] = nodo.claves[j];
+                nodo.datos[j - 1] = nodo.datos[j];
+            }
+            nodo.n--;
+        }
+    } else {
+        int i = 0;
+        while (i < nodo.n && clave.compareTo(nodo.claves[i]) >= 0) i++;
+        eliminarRecursivo(nodo.hijos[i], clave);
+
+        if (nodo.hijos[i].n < d) balancear(nodo, i);
+        if (i < nodo.n) nodo.claves[i] = obtenerMin(nodo.hijos[i + 1]);
+    }
+}
+
 
     private void balancear(NodoBPlus padre, int i) {
 
@@ -248,29 +272,34 @@ private void dividir(NodoBPlus padre, int i, NodoBPlus nodo) {
         padre.n--;
     }
 
-    private String obtenerMin(NodoBPlus nodo) {
+   /* private String obtenerMin(NodoBPlus nodo) {
         while (!nodo.hoja)
             nodo = nodo.hijos[0];
         return nodo.claves[0];
+    } */
+    
+    private String obtenerMin(NodoBPlus nodo) {
+    NodoBPlus actual = nodo;
+    while (!actual.hoja) {
+        actual = actual.hijos[0];
     }
+    return actual.claves[0];
+}
+
     
     public void recorrer() {
-
     NodoBPlus nodo = raiz;
 
-    // bajar hasta la hoja más a la izquierda
     while (!nodo.hoja) {
         nodo = nodo.hijos[0];
     }
 
-    // recorrer todas las hojas enlazadas
     while (nodo != null) {
-
         for (int i = 0; i < nodo.n; i++) {
-            System.out.println(nodo.datos[i]);
+            System.out.println("Categoría: " + nodo.claves[i]);
+            nodo.datos[i].mostrar();
         }
-
         nodo = nodo.siguiente;
-       }
     }
-}
+   }
+ }

@@ -69,15 +69,6 @@ public class SistemaCentral {
     public Lista buscarPorCategoria(String categoria) {
         return arbolBPlus.buscarCategoria(categoria);
     }
-
-   // public void eliminarProducto(String codigo) {
-      //  lista.eliminar(codigo);
-    //    avl.eliminar(codigo);
-       // hash.eliminar(codigo);
-        //arbolB.eliminar(codigo);
-        //arbolBPlus.eliminar(codigo);
-    //}
-    
     
     public void eliminarProducto(String codigo) {
     Producto p = hash.buscar(codigo);
@@ -98,7 +89,7 @@ public class SistemaCentral {
         System.out.println("El producto con código " + codigo + " no existe.");
     }
 }
-
+    
     public void listarPorNombre() {
         avl.inOrden();
     }

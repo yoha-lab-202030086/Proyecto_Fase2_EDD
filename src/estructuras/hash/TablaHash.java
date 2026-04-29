@@ -20,7 +20,7 @@ public class TablaHash {
         return Math.abs(hash);
     }
 
-    public void insertar(Producto p) {
+    /*public void insertar(Producto p) {
         
         if (buscar(p.getCodigo()) != null) {
             return;
@@ -39,7 +39,23 @@ public class TablaHash {
             }
             actual.setSiguiente(nuevo);
         }
+    } */
+    
+    public void insertar(Producto p) {
+    if (buscar(p.getCodigo()) != null) {
+        throw new RuntimeException("Error: El código de barras '" + p.getCodigo() + "' ya está registrado.");
+    }  
+    
+    int idx = hash(p.getCodigo());
+    NodoHash nuevo = new NodoHash(p);
+
+    if (tabla[idx] == null) {
+        tabla[idx] = nuevo;
+    } else {
+        nuevo.setSiguiente(tabla[idx]);
+        tabla[idx] = nuevo;
     }
+}
 
     public Producto buscar(String codigo) {
         int idx = hash(codigo);
